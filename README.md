@@ -1,5 +1,10 @@
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
+# SCREENCAST OF THE APP (GDRIVE LINK)
+link :- https://drive.google.com/file/d/1qrZBUVluu3vICEm_4cYrR65X4wPtPRmh/view?usp=sharing
+
+
+
 # Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
