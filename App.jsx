@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
-import { ScrollView, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function ChatScreen() {
@@ -9,13 +8,41 @@ function ChatScreen() {
   const [chatTitle, setChatTitle] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(false);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    fetchMessages(page);
+  }, [page]);
+
+  const fetchMessages = (page) => {
+    fetch(`https://qa.corider.in/assignment/chat?page=${page}`)
+      .then(response => response.json())
+      .then(data => {
+        if (page === 0) {
+          setMessages(data.chats);
+        } else {
+          setMessages(prevMessages => [...data.chats, ...prevMessages]);
+        }
+      })
+      .catch(error => console.error(error));
+  };
+
+  const handleScroll = (event) => {
+    if (event.nativeEvent.contentOffset.y < 50) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
 
   const sendMessage = () => {
     const message = {
-      text: newMessage,
-      isUser: true,
-      profilePicture: './assets/profile.png',
-      timestamp: new Date().toISOString(),
+      id: Date.now().toString(),
+      message: newMessage,
+      sender: {
+        image: './assets/profile.png',
+        self: true,
+        user_id: 'self',
+      },
+      time: new Date().toISOString(),
     };
     setMessages([...messages, message]);
     setNewMessage('');
@@ -25,6 +52,26 @@ function ChatScreen() {
     console.log(option);
     setModalVisible(false);
   };
+
+  const groupMessagesByDate = (messages) => {
+    const groups = {};
+    messages.forEach(msg => {
+      const date = new Date(msg.time).toLocaleDateString();
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(msg);
+    });
+    return groups;
+  };
+
+  const DateSeparator = ({ date }) => (
+    <View style={styles.dateSeparatorContainer}>
+      <View style={styles.dateLine} />
+      <Text style={styles.dateText}>{date}</Text>
+      <View style={styles.dateLine} />
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -52,18 +99,23 @@ function ChatScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.messageList}>
-        {messages.map((msg, index) => (
-          <View key={index} style={styles.messageContainer}>
-            {!msg.isUser && (
-              <Image
-                source={{ uri: msg.profilePicture }}
-                style={styles.profilePicture}
-              />
-            )}
-            <View style={[styles.messageItem, msg.isUser ? styles.userBubble : styles.otherBubble]}>
-              <Text style={styles.messageText}>{msg.text}</Text>
-            </View>
+      <ScrollView style={styles.messageList} onScroll={handleScroll} scrollEventThrottle={16}>
+        {Object.entries(groupMessagesByDate(messages)).map(([date, msgs]) => (
+          <View key={date}>
+            <DateSeparator date={date} />
+            {msgs.map((msg, index) => (
+              <View key={index} style={[styles.messageContainer, { justifyContent: msg.sender.self ? 'flex-end' : 'flex-start' }]}>
+                {!msg.sender.self && (
+                  <Image source={{ uri: msg.sender.image }} style={styles.profilePicture} />
+                )}
+                <View style={[styles.messageItem, msg.sender.self ? styles.userBubble : styles.otherBubble]}>
+                  <Text style={styles.messageText}>{msg.message}</Text>
+                </View>
+                {msg.sender.self && (
+                  <Image source={{ uri: msg.sender.image }} style={styles.profilePicture} />
+                )}
+              </View>
+            ))}
           </View>
         ))}
       </ScrollView>
@@ -75,11 +127,9 @@ function ChatScreen() {
           onChangeText={setNewMessage}
           placeholder="Type a message..."
         />
-                <TouchableOpacity onPress={() => setBubbleVisible(!bubbleVisible)}>
+        <TouchableOpacity onPress={() => setBubbleVisible(!bubbleVisible)}>
           <Ionicons name="attach-outline" size={20} color="#000" style={styles.attachIcon} />
         </TouchableOpacity>
-
-        
         {bubbleVisible && (
           <View style={styles.bubble}>
             <TouchableOpacity style={styles.bubbleIcon}>
@@ -92,7 +142,7 @@ function ChatScreen() {
               <Ionicons name="document-outline" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
-          )}
+        )}
         <TouchableOpacity onPress={sendMessage}>
           <Ionicons name="paper-plane-outline" size={20} color="#000" />
         </TouchableOpacity>
@@ -303,6 +353,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginVertical: 5,
+  },
+  dateSeparatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  dateLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E8E8E8',
+  },
+  dateText: {
+    marginHorizontal: 10,
+    color: '#666',
+    fontSize: 12,
   },
 });
 
