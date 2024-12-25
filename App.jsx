@@ -151,16 +151,18 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     backgroundColor: '#66BB6A',
+    borderRadius: 20,
+    padding: 10,
+    marginLeft: 'auto', // Pushes bubble to right
     alignSelf: 'flex-end',
-    borderWidth: 1,
-    borderColor: '#4CAF50',
+    maxWidth: '70%',
   },
   otherBubble: {
-    backgroundColor: '#E5E5E0',
+    backgroundColor: '#E8E8E8',
+    borderRadius: 20,
+    padding: 10,
     alignSelf: 'flex-start',
-    borderColor: '#B0BEC5',
-    borderWidth: 1,
-    borderRadius: 15,
+    maxWidth: '70%',
   },
   messageText: {
     color: '#000',
@@ -168,9 +170,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',  // Add white background
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#E8E8E8',
   },
   input: {
     flex: 1,
@@ -276,12 +280,12 @@ const styles = StyleSheet.create({
   },
   bubble: {
     flexDirection: 'row',
-    backgroundColor: '#66BB6A',
+    backgroundColor: '#3498db',
     borderRadius: 20,
     padding: 10,
     position: 'absolute',
     bottom: 50,
-    left: 10,
+    right: 10, // Changed from left: 10 to right: 10
     zIndex: 1,
     shadowColor: '#000',
     shadowOffset: {
@@ -299,30 +303,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginVertical: 5,
-  },
-  profilePicture: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10,
-  },
-  messageItem: {
-    padding: 10,
-    borderRadius: 15,
-    maxWidth: '80%',
-  },
-  userBubble: {
-    backgroundColor: '#66BB6A',
-    alignSelf: 'flex-end',
-  },
-  otherBubble: {
-    backgroundColor: '#FFFFFF',
-    alignSelf: 'flex-start',
-    borderColor: '#E5E5E0',
-    borderWidth: 1,
-  },
-  messageText: {
-    color: '#000',
   },
 });
 
