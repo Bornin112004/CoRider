@@ -91,8 +91,12 @@ function ChatScreen() {
           style={styles.profilePicture}
         />
         <View style={styles.locationContainer}>
-          <Text style={styles.fromText}>From: IGI Airport, T3</Text>
-          <Text style={styles.toText}>To: Sector 28</Text>
+          <Text style={styles.fromText}>
+            From: <Text style={{ fontWeight: 'normal', color: '#000' }}>IGI Airport, T3</Text>
+          </Text>
+          <Text style={styles.toText}>
+            To: <Text style={{ fontWeight: 'normal', color: '#000' }}>Sector 28</Text>
+          </Text>
         </View>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Ionicons name="ellipsis-vertical-outline" size={20} color="#000" style={styles.ellipsisIcon} />
@@ -261,8 +265,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   titleText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Mulish',
+    fontSize: 24,
+    fontWeight: '700',
+    lineHeight: 30.12,
+    textAlign: 'left',
+    textUnderlinePosition: 'from-font',
+    textDecorationSkipInk: 'none',
+    color: '#141E0D', // Add color property
     flex: 1,
   },
   editButton: {
@@ -287,10 +297,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fromText: {
-    fontWeight: 'bold',
+    fontFamily: 'Mulish',
+    fontSize: 16,
+    fontWeight: '500',
+    lineHeight: 20.08,
+    textAlign: 'left',
+    textUnderlinePosition: 'from-font',
+    textDecorationSkipInk: 'none',
+    color: '#606060', // Add color property
   },
   toText: {
-    fontWeight: 'bold',
+    fontFamily: 'Mulish',
+    fontSize: 16,
+    fontWeight: '500',
+    lineHeight: 20.08,
+    textAlign: 'left',
+    textUnderlinePosition: 'from-font',
+    textDecorationSkipInk: 'none',
+    color: '#606060', // Add color property
   },
   ellipsisIcon: {
     marginLeft: 10,
